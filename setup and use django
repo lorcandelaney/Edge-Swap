@@ -1,0 +1,56 @@
+SET UP DJANGO
+
+
+1.) make sure python is installed
+
+2.) pip install virtualenv
+
+3.) mkdir Django_Venv, cd Django_Venv
+
+4.) virtualenv .
+
+5.)cd scripts
+
+6.) type activate
+
+
+7.) type pip install django and then cd to github repo folder
+
+8.) cd webapp\src
+
+
+9.) python manage.py runserver
+
+
+10.) on browser goto 127.0.0.1:8000
+
+
+
+
+SETUP IPFS + TESTRPC
+
+1.) open new cmd console
+
+2.) testrpc -u 0
+
+
+3.) open new cmd console
+
+4.) run ipfs init (if not already)
+
+5.) new console (again)
+
+6.) ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+
+7.) ipfs config --json Gateway.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+
+8.) keep the testrpc,ipfs and webserver terminals open.
+
+9.) goto 12.0.0.1:8000
+
+
+enjoy
+
+
+
+congrats!

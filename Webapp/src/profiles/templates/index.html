@@ -1,0 +1,390 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Blockchain + IPFS based file distribution</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="../../static/css/main.css" />
+		<link rel="stylesheet" href="../../static/css/Treant.css" />
+		<!-- <link rel="stylesheet" href="../../static/css/tree_diag.css" /> -->
+		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+		<script src="../../static/js/jquery.min.js"></script>
+		<script src="../../static/js/jquery.scrollex.min.js"></script>
+		<script src="../../static/js/jquery.scrolly.min.js"></script>
+		<script src="../../static/js/skel.min.js"></script>
+		<script src="../../static/js/util.js"></script>
+		<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+		<script type="text/javascript" src="../../static/js/ipfs.js"></script>
+		<script type="text/javascript" src="../../static/js/web3.min.js"></script>
+		<script src="../../static/js/blocktest.js"></script>
+	    <script src="../../static/js/raphael.js"></script>
+	    <script src="../../static/js/Treant.js"></script>
+		    
+    	<script src="../../static/js/tree.js"></script>
+    	<link rel="apple-touch-icon" sizes="180x180" href="../../static/img/Favicon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="../../static/img/Favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="../../static/img/Favicon/favicon-16x16.png">
+		<link rel="manifest" href="../../static/img/Favicon/site.webmanifest">
+		<link rel="mask-icon" href="../../static/img/Favicon/safari-pinned-tab.svg" color="#5bbad5">
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="theme-color" content="#ffffff">   
+	</head>
+	<style type="text/css">
+		body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td { margin:0; padding:0; }
+		table { border-collapse:collapse; border-spacing:0; }
+		fieldset,img { border:0; }
+		address,caption,cite,code,dfn,em,strong,th,var { font-style:normal; font-weight:normal; }
+		caption,th { text-align:left; }
+		h1,h2,h3,h4,h5,h6 { font-size:100%; font-weight:normal; }
+		q:before,q:after { content:''; }
+		abbr,acronym { border:0; }
+		.chart { height: 450px; width: 50%; display: block; margin: auto; transform: translate(+12%);}
+		.Treant > .node {  }
+		.Treant > p { font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; font-weight: bold; font-size: 12px; }
+		.node-name { font-weight: bold;}
+		.node-banned { font-weight: bold;}
+
+		.nodeExample1 {
+		    padding: 2px;
+		    -webkit-border-radius: 3px;
+		    -moz-border-radius: 3px;
+		    border-radius: 3px;
+		    background-color: #ffffff;
+		    border: 1px solid #000;
+		    width: 200px;
+		    font-family: Tahoma;
+		    font-size: 12px;
+
+		    overflow: auto;
+		}
+
+		.nodeExample1 img {
+		    margin-right:  10px;
+		}
+	</style>
+	<body>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<script src="../../static/js/jquery.js"></script>
+
+				<!-- Header -->
+					<header id="header" class="alt">
+
+						 <script type="text/javascript">
+						    $( document ).ready(function() {
+						        console.log( "document loaded" );
+						        //getDisId();
+						    });
+						</script>
+		
+						<span class="logo"><img src="images/logo.svg" alt="" /></span>
+						<h1>Ethereum2IPFS Content Distribution Service</h1>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul>
+							<li><a href="#intro" class="active">Application Summary</a></li>
+							<li><a href="#first">Upload File and store info on blockchain</a></li>
+							<li><a href="#second">Fetch File from ID</a></li>
+							<li><a href="#third">Add Distributor</a></li>
+							<li><a href="#fourth">Ban Distributor (Creator Only)</a></li>
+							<li><a href="#fifth">Tree of Distributors</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Introduction -->
+							<section id="intro" class="main">
+								<div class="spotlight">
+									<div class="content">
+										<header class="major">
+										<h2>What is this?</h2>
+										</header>
+										<h3>Non Technical</h3>
+										<p>
+											This application is a decentralised content distribution service based on IPFS and blockchain technology.
+										</p>
+										</br>
+										<p>
+											First you upload your file and commit a certain amount of ether to incentivise people to share its contents. The file is stored in a decentralised manner on the IPFS network. The address (IPFS hash) of your content is stored on the blockchain. When a user enters the ID of your file, our system will retrieve the address (IPFS hash) of your file from the blockchain and use it to retrieve your file, allowing the user to download it. The idea is that you assign a distributor to propagate your file Id far and wide in exchange for TrialCoin, this apps native token. The people that the file Id is propagated to can then do the same themselves and the intention is that your files reach will grow exponentially as more and more people share the id. Note, you and only you dictate the fileIds that link to the files you upload due to the immutability of the blockchain so any file downloaders can be sure the file does infact come from you.
+										</p>
+
+										</br>
+										<h3>Technical</h3>
+										<p>This project delves into the application of Ethereum, IPFS and µRaiden network to an offline content distribution and replication platform based on a Blockchain-oriented solution. The model simulates the creation of a private Ethereum network, in which the content provider distributes content files stored on the IPFS network to selected source nodes by executing a Solidity Smart Contract running on the Blockchain infrastructure. Using the principles of opportunistic networking and of device-to-device (D2D) communication, the Source Nodes are then responsible for the further distribution and replication of the files among peer Content Consumers in urban environments in exchange of micropayments acting on channels provided by the µRaiden network. Such project, while creating a fully functioning Decentralised application, is an exercise to analyse the properties and integration of cutting-edge technologies, such as smart contract development, peer2peer hypermedia storage and distribution, and off-chain transactions.</p>
+										<ul class="actions">
+
+										</ul>
+									</div>
+								</div>
+							</section>
+
+						<!-- First Section -->
+							<section id="first" class="main special">
+								<header class="major">
+									<h2>Store File</h2>
+								</header>
+								<ul class="features">
+									<li>
+										<label for="fileIdStorage">File ID</label>
+										<input type="text" name="fileIdStorage" id="fileIdStorage" value="" size="512" />
+									</li>
+									<li>
+										<label for="distAddress">Original Distributor Ethereum Address</label>
+										<input type="text" name="distAddress" id="distAddress" value="" size="512" />
+									</li>
+									<li>
+										<label for="amount">Amount of Ether to commit</label>
+										<input type="text" name="amount" id="amount" value="" size="512" />
+									</li>
+									<li>
+										<label for="fileUrl">The URL of the file to distribute</label>
+										<input type="text" name="fileUrl" id="fileUrl" value="" size="512" />
+									</li>
+								<!-- 									
+									<li>
+										<form id="uploadForm" style='display:none;padding:1px;' method="post" enctype="multipart/form-data">
+											<input type="file" id="your-files" multiple>
+										</form>
+									</li> 
+								-->		
+	
+								</ul>
+
+								<footer class="major">
+									<ul class="actions">
+										<!-- <li><a href="generic.html" class="button">Learn More</a></li> -->
+										<li id= "startStorage"><input type="button" value="Submit" id="startStorage" /></li>
+									</ul>
+								</footer>
+							</section>
+
+							<script type="text/javascript">
+								$( document ).ready(function() {
+				//We can upload more than 1 file at a time but can't currently do more than 1 file ID at a time. Might have to remove the multiple file functionality for the demo despite it being cool.
+
+									$("#startStorage").click(function() {
+										var fileID = document.getElementById("fileIdStorage").value;
+										var og_address = document.getElementById('distAddress').value;
+										var amount = document.getElementById('amount').value;
+										var url = document.getElementById('fileUrl').value;
+
+										storeContent(url, fileID, og_address, amount);
+										// var fileID = document.getElementById("fileIdStorage").value;
+										// //TODO:Renable possibly when the time comes.
+										// //setFileId(fileID);
+
+										// var original_distributor = document.getElementById("distAddress").value;
+										// var yourFiles = document.getElementById("your-files");
+
+									 //    var i = 0,
+									 //        files = yourFiles.files,
+									 //        len = files.length;
+
+									 //    for (; i < len; i++) {
+									 //        console.log("Filename: " + files[i].name);
+									 //        console.log("Type: " + files[i].type);
+									 //        console.log("Size: " + files[i].size + " bytes");
+									 //        console.log("Path: " + files[i].value);
+
+									 //        storeContent(files[i].value, fileID, original_distributor);
+								  //   	}
+									});
+								});
+							</script>
+
+						<!-- Second Section -->
+							<section id="second" class="main special">
+								<header class="major">
+									<h2>Fetch File</h2>
+									<p>Provide a valid file ID to retrieve that file. The file ID will be used to retrieve the IPFS hash from the blockchain. The IPFS hash will be used to retrieve file url.</p>
+								</header>
+								<ul class="features">
+									<li>
+										<label for="fileIdFetch">File ID</label>
+										<input type="text" name="fileIdFetch" id="fileIdFetch" value="" size="512" />
+									</li>										
+								</ul>
+								
+								<footer class="major">
+									<ul class="actions">
+										<!-- <li><a href="generic.html" class="button">Learn More</a></li> -->
+										<li id= "startFetch"><input type="button" value="Submit" id="startFetch" /></li>
+									</ul>
+								</footer>
+							</section>
+
+							<script type="text/javascript">
+								$( document ).ready(function() {
+
+									$("#startFetch").click(function() {
+										var fileID = document.getElementById("fileIdFetch").value;
+										fetchContent(fileID);
+									})
+								});
+							</script>
+
+						<!-- Third Section -->
+							<section id="third" class="main special">
+								<header class="major">
+									<h2>Add Distributor</h2>
+									<p>Add a distributor so they can distribute the file</p>
+								</header>
+								<ul class="features">
+									<li>
+										<label for="distIdAdd">Ethereum address of distributor you want to add.</label>
+										<input type="text" name="distIdAdd" id="distIdAdd" value="" size="512" />
+									</li>
+
+									<li>
+										<label for="onBehalf">Add new distributor on behalf of this account: </label>
+										<input type="text" name="onBehalf" id="onBehalf" value="" size="512" />
+									</li>
+								</ul>
+								
+								<footer class="major">
+									<ul class="actions">
+										<!-- <li><a href="generic.html" class="button">Learn More</a></li> -->
+										<li id= "startAdd"><input type="button" value="Submit" id="startAdd" /></li>	
+									</ul>
+								</footer>
+							</section>
+
+							<script type="text/javascript">
+								$( document ).ready(function() {
+
+									$("#startAdd").click(function() {
+										var distID = document.getElementById("distIdAdd").value;
+										var onBehalfOf = document.getElementById("onBehalf").value;
+										addDistributor(distID, onBehalfOf);
+									})
+								});
+							</script>
+
+						<!-- Ban Distributor -->
+							<section id="fourth" class="main special">
+								<header class="major">
+									<h2>Ban Distributor</h2>
+									<p>Ban a distributor for bad behaviour (owner only).</p>
+								</header>
+
+								<ul class="features">
+									<li>
+										<label for="distIdBan">Ethereum address of distributor you want to ban.</label>
+										<input type="text" name="distIdBan" id="distIdBan" value="" size="512" />
+									</li>
+
+								</ul>
+
+								<footer class="major">
+									<ul class="actions">
+										<!-- <li><a href="generic.html" class="button">Learn More</a></li> -->
+										<li id= "startBan"><input type="button" value="Submit" id="startBan" /></li>
+									</ul>
+								</footer>
+							</section>
+
+
+							<section id="fifth" class="main special">
+								<header class="major">
+									<h2>Tree of Distributors</h2>
+									<p>A tree of all distributors.</p>
+								</header>
+								<div class="chart" id="tree_diag"></div>
+								<footer class="major">
+									<ul class="actions">
+										<li id= "delTree"><input type="button" value="Reset Tree" id="delTree" /></li>	
+									</ul>
+								</footer>
+									<script>
+											$( document ).ready(function() {
+												if(readTree()){
+													// window.tree = readTree();
+													// window.chart_config = window.tree.slice();
+													new Treant(readTree());
+													window.tree = readTree();
+												}
+												else{
+													console.log('no tree to show');
+												}
+												// for(i=1; i<readTree().length; i++){
+												// 	console.log(i);
+												// 	delete window.chart_config[i].myID;
+												// 	console.log(window.chart_config);
+												// }
+	    							// 			console.log( "Tree_call", window.chart_config );
+	    										//writeTree(window.chart_config);
+											});
+											$( document ).ready(function() {
+
+												$("#delTree").click(function() {
+													deleteTree();
+												})
+											});
+			    					</script>
+
+
+								<footer class="major">
+								</footer>
+							</section>
+
+							<script type="text/javascript">
+								$( document ).ready(function() {
+
+									$("#startBan").click(function() {
+										var distID = document.getElementById("distIdBan").value;
+										banDistributor(distID);
+									})
+								}); 
+							</script>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section>
+			
+						</section>
+						<section>
+							<h2></h2>
+							
+							<ul class="icons">
+								<li><a href="#" class="icon fa-twitter alt"><span class="label">Twitter</span></a></li>
+								<li><a href="#" class="icon fa-facebook alt"><span class="label">Facebook</span></a></li>
+								<li><a href="#" class="icon fa-instagram alt"><span class="label">Instagram</span></a></li>
+								<li><a href="#" class="icon fa-github alt"><span class="label">GitHub</span></a></li>
+								<li><a href="#" class="icon fa-dribbble alt"><span class="label">Dribbble</span></a></li>
+							</ul>
+						</section>
+						<p><br />
+						Built by <a href="https://github.com/FlinnD/LBL-Ethereum2IPFS-Content-Distribution-Service/">Flinn Dolman and Vishal Soomaney Vijaykumar</a> for <a href="">Potato corp.</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+<!-- 			<script src="../../static/js/jquery.min.js"></script>
+			<script src="../../static/js/jquery.scrollex.min.js"></script>
+			<script src="../../static/js/jquery.scrolly.min.js"></script>
+			<script src="../../static/js/skel.min.js"></script>
+			<script src="../../static/js/util.js"></script>
+			<!-[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+<!-- 			<script type="text/javascript" src="../../static/js/ipfs.js"></script>
+    		<script type="text/javascript" src="../../static/js/web3.min.js"></script>
+    		<script src="../../static/js/blocktest.js"></script>
+    		<div class="chart" id="tree_diag"></div>
+		    <script src="../../vendor/raphael.js"></script>
+		    <script src="../../Treant.js"></script>
+		    
+    		<script src="../../static/js/tree.js"></script>    -->	
+
+	</body>
+</html>

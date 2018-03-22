@@ -1,0 +1,21 @@
+Download ipfs: https://dist.ipfs.io/#go-ipfs
+Export it to a folder in programfiles
+Add it to the path (system env variables)
+
+Open up a terminal.
+Run the following in this order:
+1. ipfs init
+2. ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+3. ipfs config --json Gateway.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+4. ipfs daemon
+In a separate terminal, run: testrpc -u 0 --gasLimit 100000000
+
+In a separate terminal, go to the root of the project and run: truffle migrate
+From this terminal, obtain the tree address and use it to update the address at "contract.at" in blocktest.js.
+
+Next, run the webapp. (Open a terminal, Go to projectRoot/Webapp/src then run "python manage.py runserver")
+In your browser, go to: 127.0.0.1:8000
+
+If running the webapp failed, try : "python manage.py runserver 8080" then in your browser go to: 127.0.0.1:8080
+
+If you have any questions regarding any of these steps, how they work, why they work or if anything breaks for some reason contact Lorcan Delaney
